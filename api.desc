@@ -1,0 +1,149 @@
+openapi: 3.0.4
+info:
+  title: Swagger Petstore - OpenAPI 3.0
+  description: |-
+    API for Dice Roller
+  version: 1.0.12
+servers:
+  - url: https://petstore3.swagger.io/api/v3
+paths:
+  /createsession:
+    post:
+        tags:
+          - Sessions
+        summary: Create a Session.
+        description: Creates a Session for players and a GM.
+        responses:
+          '200':
+            description: session created
+            content:
+              application/json:
+                schema:
+                  type: string
+          '400':
+            description: Invalid tag value
+          default:
+            description: Unexpected error
+  /{sessionId}/closesession:
+    post:
+        tags:
+          - Sessions
+        summary: Finish a session.
+        description: Finishes a session.
+        parameters:
+          - name: sessionId
+            in: path
+            description: The current session id.
+            required: true
+            explode: true
+            schema:
+              type: integer
+          - name: userId
+            in: header
+            description: The userId closing this session (must be GM or an active player of the session).
+            required: true
+            explode: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: finished session
+            content:
+              application/json:
+                schema:
+                  type: string
+          '400':
+            description: Invalid session value
+          default:
+            description: Unexpected error
+  /{sessionId}/susbscribe:
+    post:
+        tags:
+          - Sessions
+        summary: Finish a session.
+        description: Finishes a session.
+        parameters:
+          - name: sessionId
+            in: path
+            description: The current session id.
+            required: true
+            explode: true
+            schema:
+              type: integer
+          - name: userId
+            in: header
+            description: The userId closing this session (must be GM or an active player of the session).
+            required: true
+            explode: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: user subscribed to the session
+            content:
+              application/json:
+                schema:
+                  type: string
+                  description: The session you subscribed to.
+          '400':
+            description: Invalid session value
+          default:
+            description: Unexpected error
+
+  /{sessionId}/gmroll:
+    post:
+      tags:
+        - Rolls
+      summary: GameMaster roll.
+      description: Allow GM to roll.
+      parameters:
+        - name: sessionId
+          in: path
+          description: The current session id.
+          required: true
+          explode: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: integer
+        '400':
+          description: Invalid tag value
+        default:
+          description: Unexpected error
+  /{sessionId}/lastrolls:
+    get:
+      tags:
+        - Rolls
+      summary: Retrieves the last n rolls for a given session.
+      description: Retrieves the last n rolls for a given session.
+      parameters:
+        - name: sessionId
+          in: path
+          description: The current session id.
+          required: true
+          explode: true
+          schema:
+            type: integer
+        - name: number
+          in: query
+          description: The number of rolls to retrieve.
+          required: false
+          explode: true
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: session created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
